@@ -1,0 +1,81 @@
+﻿@model WebShop.Models.ProductViewModel
+
+<div class="mx-auto col-12">
+    <h2>Products</h2>
+    <hr />
+    <button class="btn btn-outline-success" id="CreateProduct">New</button>
+    <br />
+</div>
+
+<div class="mt-2">
+    <table class="table table-bordered"
+           id="ProductsTable"
+           data-create="@Url.Action("CreateProduct", "Product")"
+           data-edit="@Url.Action("EditProduct", "Product")"
+           data-update="@Url.Action("UpdateProduct", "Product")">
+        <thead>
+            <tr class="table-info">
+                <th>Number</th>
+                <th class="w-50">Title</th>
+                <th>Price</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ProductsInDb.Count() <= default(int) && Model.ProductsInMemory.Count() <= default(int))
+            {
+                <tr>
+                    <td colspan="4" class="text-center tdEmtyTable">There is not products registered</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.ProductsInDb)
+                {
+                    <tr>
+                        <td class="number">@item.Number</td>
+                        <td class="title">@item.Title</td>
+                        <td class="price">@item.Price</td>
+                        <td>
+                            <button class="btn btn-outline-success btn-sm editProduct btn-block" data-id="@item.Id" data-inmemory="@false">Edit</button>
+                        </td>
+                    </tr>
+                }
+                foreach (var item in Model.ProductsInMemory)
+                {
+                    <tr>
+                        <td class="number">@item.Number</td>
+                        <td class="title">@item.Title</td>
+                        <td class="price">@item.Price</td>
+                        <td>
+                            <button class="btn btn-outline-success btn-sm editProduct btn-block" data-id="@item.Id" data-inmemory="@true">Edit</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="ModalProductsManage" class="modal fade" data-backdrop="static" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="UdpateProduct" class="btn btn-success" type="button">Save</button>
+                <button class="btn btn-info" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="@Url.Content("~/Scripts/product/product.js")"></script>
+}
